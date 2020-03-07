@@ -2,22 +2,44 @@ import React, { Component } from 'react';
 import './app.css';
 import ReactImage from './react.png';
 
+import { Container, Icon, Form, TextArea, Header, Segment, Table, Button, Tab } from 'semantic-ui-react';
+import ProductList from './components/ProductList';
+
+const panes = [
+    {
+        menuItem: 'Products',
+        render: () => (
+            <Tab.Pane attached={false}>
+                <ProductList />
+            </Tab.Pane>
+        )
+    }
+];
+
 export default class App extends Component {
-  state = { username: null };
+    state = { username: null };
 
-  componentDidMount() {
-    fetch('/api/getUsername')
-      .then(res => res.json())
-      .then(user => this.setState({ username: user.username }));
-  }
+    componentDidMount() {
+        // fetch('/api/getUsername')
+        //   .then(res => res.json())
+        //   .then(user => this.setState({ username: user.username }));
+    }
 
-  render() {
-    const { username } = this.state;
-    return (
-      <div>
-        {username ? <h1>{`Hello ${username}`}</h1> : <h1>Loading.. please wait!</h1>}
-        <img src={ReactImage} alt="react" />
-      </div>
-    );
-  }
+    render() {
+        // const { username } = this.state;
+        return (
+            <Container>
+                <Segment inverted>
+                    <Header as="h2" inverted color="red">
+                        <Icon name="shopping cart" />
+                        <Header.Content>
+                            Shopify Product Management
+                            <Header.Subheader>State of Matter</Header.Subheader>
+                        </Header.Content>
+                    </Header>
+                </Segment>
+                <Tab menu={{ secondary: true }} panes={panes} />
+            </Container>
+        );
+    }
 }
