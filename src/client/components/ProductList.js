@@ -1,77 +1,80 @@
+/* eslint-disable no-tabs */
 import React, { Component } from 'react';
-import {
-  Container,
-  Icon,
-  Form,
-  TextArea,
-  Header,
-  Segment,
-  Table,
-  Button,
-  Tab,
-} from 'semantic-ui-react';
-import Shopify from '../services/Shopify';
+import { Container, Icon, Form, TextArea, Header, Segment, Table, Button, Tab } from 'semantic-ui-react';
+import Error from './Error';
 
 export default class ProductList extends Component {
-  constructor() {
-    super();
-    this.products;
-    this.listProducts();
-  }
+	constructor() {
+		super();
+		this.products;
+		// this.listProducts();
 
-  async listProducts() {
-    let products = await Shopify.listProducts();
-  }
+		this.state = {
+			errors: null
+		};
+	}
 
-  render() {
-    return (
-      <Table celled striped>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell colSpan="3">Git Repository</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
+	// async listProducts() {
+	// 	try {
+	// 		let products = await fetch('/api/listProducts');
+	// 		console.log('products', products);
+	// 	} catch (error) {
+	// 		console.log('error', error);
+	// 	}
+	// }
 
-        <Table.Body>
-          <Table.Row>
-            <Table.Cell collapsing>
-              <Icon name="folder" /> node_modules
-            </Table.Cell>
-            <Table.Cell>Initial commit</Table.Cell>
-            <Table.Cell collapsing textAlign="right">
-              10 hours ago
-            </Table.Cell>
-          </Table.Row>
-          <Table.Row>
-            <Table.Cell>
-              <Icon name="folder" /> test
-            </Table.Cell>
-            <Table.Cell>Initial commit</Table.Cell>
-            <Table.Cell textAlign="right">10 hours ago</Table.Cell>
-          </Table.Row>
-          <Table.Row>
-            <Table.Cell>
-              <Icon name="folder" /> build
-            </Table.Cell>
-            <Table.Cell>Initial commit</Table.Cell>
-            <Table.Cell textAlign="right">10 hours ago</Table.Cell>
-          </Table.Row>
-          <Table.Row>
-            <Table.Cell>
-              <Icon name="file outline" /> package.json
-            </Table.Cell>
-            <Table.Cell>Initial commit</Table.Cell>
-            <Table.Cell textAlign="right">10 hours ago</Table.Cell>
-          </Table.Row>
-          <Table.Row>
-            <Table.Cell>
-              <Icon name="file outline" /> Gruntfile.js
-            </Table.Cell>
-            <Table.Cell>Initial commit</Table.Cell>
-            <Table.Cell textAlign="right">10 hours ago</Table.Cell>
-          </Table.Row>
-        </Table.Body>
-      </Table>
-    );
-  }
+	render() {
+		return (
+			<Segment>
+				<Error header={this.state.errors} />
+				<Table celled striped>
+					<Table.Header>
+						<Table.Row>
+							<Table.HeaderCell colSpan="3">Git Repository</Table.HeaderCell>
+						</Table.Row>
+					</Table.Header>
+
+					<Table.Body>
+						<Table.Row>
+							<Table.Cell collapsing>
+								<Icon name="folder" /> node_modules
+							</Table.Cell>
+							<Table.Cell>Initial commit</Table.Cell>
+							<Table.Cell collapsing textAlign="right">
+								10 hours ago
+							</Table.Cell>
+						</Table.Row>
+						<Table.Row>
+							<Table.Cell>
+								<Icon name="folder" /> test
+							</Table.Cell>
+							<Table.Cell>Initial commit</Table.Cell>
+							<Table.Cell textAlign="right">10 hours ago</Table.Cell>
+						</Table.Row>
+						<Table.Row>
+							<Table.Cell>
+								<Icon name="folder" /> build
+							</Table.Cell>
+							<Table.Cell>Initial commit</Table.Cell>
+							<Table.Cell textAlign="right">10 hours ago</Table.Cell>
+						</Table.Row>
+						<Table.Row>
+							<Table.Cell>
+								<Icon name="file outline" /> package.json
+							</Table.Cell>
+							<Table.Cell>Initial commit</Table.Cell>
+							<Table.Cell textAlign="right">10 hours ago</Table.Cell>
+						</Table.Row>
+						<Table.Row>
+							<Table.Cell>
+								<Icon name="file outline" /> Gruntfile.js
+							</Table.Cell>
+							<Table.Cell>Initial commit</Table.Cell>
+							<Table.Cell textAlign="right">10 hours ago</Table.Cell>
+						</Table.Row>
+					</Table.Body>
+				</Table>
+			</Segment>
+		);
+	}
 }
