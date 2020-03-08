@@ -4,7 +4,7 @@ import './app.css';
 import ReactImage from './react.png';
 
 import { Container, Icon, Form, TextArea, Header, Segment, Table, Button, Tab } from 'semantic-ui-react';
-import ProductList from './components/ProductList';
+import ProductList from './components/products/ProductList';
 
 const panes = [
 	{

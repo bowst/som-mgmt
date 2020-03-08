@@ -13,7 +13,7 @@ import {
 	Loader,
 	Dimmer
 } from 'semantic-ui-react';
-import Error from './Error';
+import Error from '../Error';
 // import Loader from './Loader';
 
 export default class ProductList extends Component {
@@ -32,7 +32,6 @@ export default class ProductList extends Component {
 		try {
 			const response = await fetch('/api/listProducts');
 			const json = await response.json();
-			// console.log('products', products);
 			this.setState({ products: json.products });
 		} catch (error) {
 			console.log('error', error);
