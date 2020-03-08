@@ -2,20 +2,11 @@
 import React, { Component } from 'react';
 import './app.css';
 import ReactImage from './react.png';
+import { Route, Switch } from 'react-router-dom';
 
-import { Container, Icon, Form, TextArea, Header, Segment, Table, Button, Tab } from 'semantic-ui-react';
+import { Container, Icon, Header, Segment } from 'semantic-ui-react';
 import ProductList from './components/products/ProductList';
-
-const panes = [
-	{
-		menuItem: 'Products',
-		render: () => (
-			<Tab.Pane attached={false}>
-				<ProductList />
-			</Tab.Pane>
-		)
-	}
-];
+import ProductDetail from './components/products/ProductDetail';
 
 export default class App extends Component {
 	render() {
@@ -30,7 +21,10 @@ export default class App extends Component {
 						</Header.Content>
 					</Header>
 				</Segment>
-				<Tab menu={{ secondary: true }} panes={panes} />
+				<Switch>
+					<Route path="/" component={ProductList} />
+					<Route path="/products/:id" component={ProductDetail} />
+				</Switch>
 			</Container>
 		);
 	}

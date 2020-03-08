@@ -37,7 +37,7 @@ exports.listProducts = async () => {
 
 	try {
 		const products = await shopify.product.list();
-		console.log('products', products);
+		// console.log('products', products);
 		return products;
 	} catch (error) {
 		console.log('error', error);

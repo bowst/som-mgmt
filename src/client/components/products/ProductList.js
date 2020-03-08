@@ -1,18 +1,7 @@
 /* eslint-disable no-tabs */
 import React, { Component } from 'react';
-import {
-	Container,
-	Icon,
-	Form,
-	TextArea,
-	Header,
-	Segment,
-	Table,
-	Button,
-	Tab,
-	Loader,
-	Dimmer
-} from 'semantic-ui-react';
+import { Breadcrumb, Table, Loader, Dimmer } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 import Error from '../Error';
 // import Loader from './Loader';
 
@@ -39,10 +28,18 @@ export default class ProductList extends Component {
 	}
 
 	productRow(product) {
-		console.log('product', product.title);
 		return (
 			<Table.Row key={product.id}>
-				<Table.Cell>{product.title}</Table.Cell>
+				<Table.Cell>
+					<Link
+						to={{
+							pathname: `/products/${product.id}`,
+							state: { product }
+						}}
+					>
+						{product.title}
+					</Link>
+				</Table.Cell>
 			</Table.Row>
 		);
 	}
@@ -59,19 +56,24 @@ export default class ProductList extends Component {
 		}
 
 		return (
-			<Table celled striped>
-				<Table.Header>
-					<Table.Row>
-						<Table.HeaderCell colSpan="3">Products</Table.HeaderCell>
-					</Table.Row>
-				</Table.Header>
+			<div>
+				<Breadcrumb>
+					<Breadcrumb.Section>Products</Breadcrumb.Section>
+				</Breadcrumb>
+				<Table celled striped>
+					<Table.Header>
+						<Table.Row>
+							<Table.HeaderCell colSpan="3">Products</Table.HeaderCell>
+						</Table.Row>
+					</Table.Header>
 
-				<Table.Body>
-					{products.map(product => {
-						return this.productRow(product);
-					})}
-				</Table.Body>
-			</Table>
+					<Table.Body>
+						{products.map(product => {
+							return this.productRow(product);
+						})}
+					</Table.Body>
+				</Table>
+			</div>
 		);
 	}
 

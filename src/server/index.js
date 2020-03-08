@@ -17,7 +17,6 @@ app.get('/api/listProducts', async (req, res) => {
 	} catch (error) {
 		throw Error(error);
 	}
-	// res.send('test');
 });
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
