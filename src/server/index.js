@@ -4,20 +4,20 @@ const os = require('os');
 
 const app = express();
 
-// const shopify = require('./shopify');
+const shopify = require('./shopify');
 
 app.use(express.static('dist'));
 
 app.get('/api/getUsername', (req, res) => res.send({ username: os.userInfo().username }));
 
 app.get('/api/listProducts', async (req, res) => {
-	// try {
-	// 	const products = await shopify.listProducts();
-	// 	res.send({ products });
-	// } catch (error) {
-	// 	throw Error(error);
-	// }
-	res.set('test');
+	try {
+		const products = await shopify.listProducts();
+		res.send({ products });
+	} catch (error) {
+		throw Error(error);
+	}
+	// res.send('test');
 });
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));

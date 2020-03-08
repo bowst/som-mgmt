@@ -41,5 +41,6 @@ exports.listProducts = async () => {
 		return products;
 	} catch (error) {
 		console.log('error', error);
+		return error;
 	}
 };

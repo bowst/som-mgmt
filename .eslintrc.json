@@ -9,7 +9,7 @@
 		"no-console": "off",
 		"comma-dangle": "off",
 		"react/jsx-filename-extension": "off",
-		"indent": [2, "tab"],
+		"indent": ["tab"],
 		"allowIndentationTabs": true,
 		"arrow-parens": ["as-needed"]
 	}
