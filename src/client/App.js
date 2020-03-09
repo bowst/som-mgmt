@@ -16,8 +16,8 @@ export default class App extends Component {
 					<Header as="h2" inverted color="red">
 						<Icon name="shopping cart" />
 						<Header.Content>
-							Evenflo Product Management
-							<Header.Subheader>Syncronization Tool Between Salsify and SFCC</Header.Subheader>
+							Shopify Product Management
+							<Header.Subheader>State of Matter</Header.Subheader>
 						</Header.Content>
 					</Header>
 				</Segment>
