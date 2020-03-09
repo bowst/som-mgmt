@@ -7,6 +7,7 @@ import { Route, Switch } from 'react-router-dom';
 import { Container, Icon, Header, Segment } from 'semantic-ui-react';
 import ProductList from './components/products/ProductList';
 import ProductDetail from './components/products/ProductDetail';
+import VariantDetail from './components/products/VariantDetail';
 
 export default class App extends Component {
 	render() {
@@ -22,7 +23,8 @@ export default class App extends Component {
 					</Header>
 				</Segment>
 				<Switch>
-					<Route path="/products/:id" component={ProductDetail} />
+					<Route exact path="/products/:productId/variant/:id" component={VariantDetail} />
+					<Route exact path="/products/:id" component={ProductDetail} />
 					<Route path="/" component={ProductList} />
 				</Switch>
 			</Container>

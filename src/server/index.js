@@ -20,6 +20,25 @@ app.get('/api/listProducts', async (req, res) => {
 	}
 });
 
+app.get('/api/getProduct', async (req, res) => {
+	console.log('req', req);
+	try {
+		const product = await shopify.getProduct(null);
+		res.send({ product });
+	} catch (error) {
+		throw Error(error);
+	}
+});
+
+app.get('/api/listProductImages', async (req, res) => {
+	try {
+		const images = await shopify.listProductImages();
+		res.send({ images });
+	} catch (error) {
+		throw Error(error);
+	}
+});
+
 const root_path = path.join(__dirname, '../../public/index.html');
 console.log('root_path', root_path);
 app.get('/*', (req, res) => res.sendFile(root_path));

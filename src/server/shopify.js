@@ -25,22 +25,29 @@ const shopify = new Shopify({
 	password: process.env.SHOPIFY_PASSWORD
 });
 
-// const auth_token = btoa(process.env.SHOPIFY_API_KEY + ':' + process.env.SHOPIFY_PASSWORD);
-
-// const headers = {
-//     Authorization: 'Basic ' + auth_token
-// };
-
 exports.listProducts = async () => {
-	// const url = base_url + '/admin/api/2020-01/products.json';
-	console.log('test');
-
 	try {
 		const products = await shopify.product.list();
-		// console.log('products', products);
 		return products;
 	} catch (error) {
-		console.log('error', error);
+		return error;
+	}
+};
+
+exports.getProduct = async productId => {
+	try {
+		const product = await shopify.product.get(productId);
+		return product;
+	} catch (error) {
+		return error;
+	}
+};
+
+exports.listProductImages = async productId => {
+	try {
+		const images = await shopify.productImage.list(productId);
+		return images;
+	} catch (error) {
 		return error;
 	}
 };

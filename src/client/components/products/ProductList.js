@@ -3,7 +3,9 @@ import React, { Component } from 'react';
 import { Breadcrumb, Table, Loader, Dimmer, Segment } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import Error from '../Error';
-// import Loader from './Loader';
+import { sortBy, reverse } from 'lodash';
+
+const moment = require('moment');
 
 export default class ProductList extends Component {
 	constructor() {
@@ -21,13 +23,19 @@ export default class ProductList extends Component {
 		try {
 			const response = await fetch('/api/listProducts');
 			const json = await response.json();
-			this.setState({ products: json.products });
+			const products = json.products;
+			const sortedProducts = sortBy(products, p => {
+				const updatedUnix = moment(p.updated_at).unix();
+				return updatedUnix;
+			});
+			this.setState({ products: reverse(sortedProducts) });
 		} catch (error) {
 			console.log('error', error);
 		}
 	}
 
 	productRow(product) {
+		const updatedDate = moment(product.updated_at).format('MMM D, YYYY hh:mm a');
 		return (
 			<Table.Row key={product.id}>
 				<Table.Cell>
@@ -40,6 +48,7 @@ export default class ProductList extends Component {
 						{product.title}
 					</Link>
 				</Table.Cell>
+				<Table.Cell>{updatedDate}</Table.Cell>
 			</Table.Row>
 		);
 	}
@@ -66,7 +75,8 @@ export default class ProductList extends Component {
 				<Table celled striped>
 					<Table.Header>
 						<Table.Row>
-							<Table.HeaderCell colSpan="3">Products</Table.HeaderCell>
+							<Table.HeaderCell>Products</Table.HeaderCell>
+							<Table.HeaderCell>Last Updated</Table.HeaderCell>
 						</Table.Row>
 					</Table.Header>
 
