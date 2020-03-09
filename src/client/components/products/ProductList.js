@@ -1,6 +1,6 @@
 /* eslint-disable no-tabs */
 import React, { Component } from 'react';
-import { Breadcrumb, Table, Loader, Dimmer } from 'semantic-ui-react';
+import { Breadcrumb, Table, Loader, Dimmer, Segment } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import Error from '../Error';
 // import Loader from './Loader';
@@ -57,9 +57,12 @@ export default class ProductList extends Component {
 
 		return (
 			<div>
-				<Breadcrumb>
-					<Breadcrumb.Section>Products</Breadcrumb.Section>
-				</Breadcrumb>
+				<Segment textAlign="left" basic>
+					<Breadcrumb>
+						<Breadcrumb.Section>Products</Breadcrumb.Section>
+					</Breadcrumb>
+				</Segment>
+
 				<Table celled striped>
 					<Table.Header>
 						<Table.Row>

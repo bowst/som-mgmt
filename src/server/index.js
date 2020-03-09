@@ -3,6 +3,7 @@ const express = require('express');
 const os = require('os');
 
 const app = express();
+const path = require('path');
 
 const shopify = require('./shopify');
 
@@ -19,6 +20,9 @@ app.get('/api/listProducts', async (req, res) => {
 	}
 });
 
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, '../../public/index.html')));
+const root_path = path.join(__dirname, '../../public/index.html');
+console.log('root_path', root_path);
+app.get('/*', (req, res) => res.sendFile(root_path));
+// app.get('/', (req, res) => res.send({}));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));

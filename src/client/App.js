@@ -12,7 +12,7 @@ export default class App extends Component {
 	render() {
 		return (
 			<Container>
-				<Segment inverted>
+				<Segment textAlign="left">
 					<Header as="h2" color="red">
 						<Icon name="shopping cart" />
 						<Header.Content>
