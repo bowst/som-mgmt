@@ -13,7 +13,7 @@ export default class App extends Component {
 		return (
 			<Container>
 				<Segment inverted>
-					<Header as="h2" inverted color="red">
+					<Header as="h2" color="red">
 						<Icon name="shopping cart" />
 						<Header.Content>
 							Shopify Product Management
@@ -22,8 +22,8 @@ export default class App extends Component {
 					</Header>
 				</Segment>
 				<Switch>
-					<Route path="/" component={ProductList} />
 					<Route path="/products/:id" component={ProductDetail} />
+					<Route path="/" component={ProductList} />
 				</Switch>
 			</Container>
 		);

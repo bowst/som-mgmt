@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 
-import { useParams } from 'react-router-dom';
+import {} from 'react-router-dom';
 import { Header, Dimmer, Loader } from 'semantic-ui-react';
 
 export default class ProductDetail extends Component {
 	constructor(props) {
 		super(props);
-		console.log('props', props);
-		let { id } = useParams();
+		// console.log('props', props);
 
 		this.state = {
-			product: null
+			product: props.location.state.product
 		};
 	}
 
