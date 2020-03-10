@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import { Breadcrumb, Table, Loader, Dimmer, Segment } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import Error from '../Error';
 import { sortBy, reverse } from 'lodash';
 
 const moment = require('moment');
@@ -14,7 +13,6 @@ export default class ProductList extends Component {
 		this.listProducts();
 
 		this.state = {
-			errors: null,
 			products: null
 		};
 	}
@@ -30,7 +28,7 @@ export default class ProductList extends Component {
 			});
 			this.setState({ products: reverse(sortedProducts) });
 		} catch (error) {
-			console.log('error', error);
+			throw new Error(error);
 		}
 	}
 
@@ -91,11 +89,6 @@ export default class ProductList extends Component {
 	}
 
 	render() {
-		return (
-			<div>
-				<Error header={this.state.errors} />
-				{this.productTable()}
-			</div>
-		);
+		return <div>{this.productTable()}</div>;
 	}
 }

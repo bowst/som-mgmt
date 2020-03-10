@@ -21,9 +21,9 @@ app.get('/api/listProducts', async (req, res) => {
 });
 
 app.get('/api/getProduct', async (req, res) => {
-	console.log('req', req);
 	try {
-		const product = await shopify.getProduct(null);
+		const productId = req.query.productId;
+		const product = await shopify.getProduct(productId);
 		res.send({ product });
 	} catch (error) {
 		throw Error(error);
@@ -32,7 +32,8 @@ app.get('/api/getProduct', async (req, res) => {
 
 app.get('/api/listProductImages', async (req, res) => {
 	try {
-		const images = await shopify.listProductImages();
+		const productId = req.query.productId;
+		const images = await shopify.listProductImages(productId);
 		res.send({ images });
 	} catch (error) {
 		throw Error(error);
@@ -40,8 +41,7 @@ app.get('/api/listProductImages', async (req, res) => {
 });
 
 const root_path = path.join(__dirname, '../../public/index.html');
-console.log('root_path', root_path);
+// console.log('root_path', root_path);
 app.get('/*', (req, res) => res.sendFile(root_path));
-// app.get('/', (req, res) => res.send({}));
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));

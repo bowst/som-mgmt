@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 
 import { Link } from 'react-router-dom';
-import { Header, Dimmer, Loader, Segment, Breadcrumb, Table } from 'semantic-ui-react';
+import { Header, Dimmer, Loader, Segment, Breadcrumb, Table, Card } from 'semantic-ui-react';
+
+import { getProduct } from '../../services/shopify';
 
 export default class ProductDetail extends Component {
 	constructor(props) {
@@ -13,10 +15,7 @@ export default class ProductDetail extends Component {
 
 	componentDidMount() {
 		const { product } = this.state;
-		// console.log('this.props.match.params.id', this.props.match.params.id);
 		const productId = this.props.match.params.id;
-		console.log('productId', productId);
-
 		if (!product && productId) {
 			this.getProduct(productId);
 		}
@@ -24,9 +23,8 @@ export default class ProductDetail extends Component {
 
 	async getProduct(productId) {
 		try {
-			const response = await fetch('/api/getProduct', { productId });
-			const json = await response.json();
-			this.setState({ product: json.product });
+			const product = await getProduct(productId);
+			this.setState({ product });
 		} catch (error) {
 			console.log('error', error);
 		}
@@ -39,7 +37,7 @@ export default class ProductDetail extends Component {
 					<Link
 						to={{
 							pathname: `/products/${variant.product_id}/variant/${variant.id}`,
-							state: {}
+							state: { product, variant }
 						}}
 					>
 						{variant.title}
@@ -51,7 +49,6 @@ export default class ProductDetail extends Component {
 
 	render() {
 		const { product } = this.state;
-		console.log('product', product);
 		if (!product) {
 			return (
 				<Dimmer active>
