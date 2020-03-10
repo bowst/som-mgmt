@@ -39,9 +39,9 @@ export default class ProductList extends Component {
 				<Table.Cell>
 					<Link
 						to={{
-							pathname: `/products/${product.id}`,
-							state: { product }
+							pathname: `/products/${product.id}`
 						}}
+						params={product}
 					>
 						{product.title}
 					</Link>

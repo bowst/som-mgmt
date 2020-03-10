@@ -7,7 +7,7 @@ import { Route, Switch } from 'react-router-dom';
 import { Container, Icon, Header, Segment } from 'semantic-ui-react';
 import Error from './components/Error';
 import ProductList from './components/products/ProductList';
-import ProductDetail from './components/products/ProductDetail';
+import { ProductDetail } from './components/products/ProductDetail';
 import VariantDetail from './components/products/variants/VariantDetail';
 
 export default class App extends Component {
