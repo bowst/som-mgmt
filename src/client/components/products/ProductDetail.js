@@ -6,8 +6,11 @@ import { Header, Dimmer, Loader, Segment, Breadcrumb, Table, Card } from 'semant
 import { getProduct } from '../../services/shopify';
 import ShopifyContext from '../../context/ShopifyContext';
 
+import { groupBy } from 'lodash';
+
 export const ProductDetail = props => {
 	const [product, setProduct] = useState(props.product);
+	console.log('product: ', product);
 	const [match, setMatch] = useState(props.match);
 	const options = useContext(ShopifyContext);
 	console.log('options: ', options);
@@ -17,33 +20,12 @@ export const ProductDetail = props => {
 			const productId = match.params.id;
 			if (!product && productId) {
 				const newProduct = await getProduct(productId);
+				console.log('newProduct: ', newProduct);
 				setProduct(newProduct);
 			}
-			groupVariants();
 		};
 		checkProps();
 	}, []);
-
-	const groupVariants = () => {
-		console.log('product', product);
-	};
-
-	const variantRow = variant => {
-		return (
-			<Table.Row key={variant.id}>
-				<Table.Cell>
-					<Link
-						to={{
-							pathname: `/products/${variant.product_id}/variant/${variant.id}`,
-							state: { product, variant }
-						}}
-					>
-						{variant.title}
-					</Link>
-				</Table.Cell>
-			</Table.Row>
-		);
-	};
 
 	if (!product) {
 		return (
@@ -52,6 +34,32 @@ export const ProductDetail = props => {
 			</Dimmer>
 		);
 	}
+
+	const variantsByColor = Object.entries(groupBy(product.variants, options.colorOption));
+
+	const colorVariantRow = ([color, variants], i) => {
+		console.log('color: ', color);
+		console.log('variants: ', variants);
+		const variantLength = variants.length;
+		// return <Table.Row></Table.Row>;
+		return variants.map((v, i) => {
+			if (i === 0) {
+				return (
+					<Table.Row>
+						<Table.Cell rowSpan={variantLength}>{color}</Table.Cell>
+						<Table.Cell>{v.title}</Table.Cell>
+					</Table.Row>
+				);
+			} else {
+				return (
+					<Table.Row>
+						<Table.Cell>{v.title}</Table.Cell>
+					</Table.Row>
+				);
+			}
+		});
+	};
+
 	return (
 		<div>
 			<Segment textAlign="left" basic>
@@ -67,13 +75,16 @@ export const ProductDetail = props => {
 			<Table celled striped>
 				<Table.Header>
 					<Table.Row>
-						<Table.HeaderCell colSpan="3">Variants</Table.HeaderCell>
+						<Table.HeaderCell>Color</Table.HeaderCell>
+						<Table.HeaderCell>Variants</Table.HeaderCell>
 					</Table.Row>
 				</Table.Header>
 
 				<Table.Body>
-					{product.variants.map(variant => {
-						return variantRow(variant);
+					{variantsByColor.map((variants, i) => {
+						return colorVariantRow(variants, i);
+						// console.log('rows: ', rows);
+						// return null;
 					})}
 				</Table.Body>
 			</Table>

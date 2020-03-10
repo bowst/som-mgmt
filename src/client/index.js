@@ -2,10 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import ShopifyContext from './context/ShopifyContext';
-console.log('ShopifyContext: ', ShopifyContext);
 
 import { BrowserRouter } from 'react-router-dom';
 
+/**
+ * Add system-wide options here
+ */
 const options = {
 	sizeOption: 'option1',
 	colorOption: 'option2'
