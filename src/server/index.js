@@ -40,6 +40,18 @@ app.get('/api/listProductImages', async (req, res) => {
 	}
 });
 
+// Metafields
+
+app.get('/api/getVariantMetafields', async (req, res) => {
+	try {
+		const variantId = req.query.variantId;
+		const metafields = await shopify.getVariantMetafields(variantId);
+		res.send({ metafields });
+	} catch (error) {
+		throw Error(error);
+	}
+});
+
 const root_path = path.join(__dirname, '../../public/index.html');
 // console.log('root_path', root_path);
 app.get('/*', (req, res) => res.sendFile(root_path));

@@ -4,7 +4,7 @@ import { Dimmer, Loader, Header, Breadcrumb, Segment, Card } from 'semantic-ui-r
 import { Link } from 'react-router-dom';
 
 import { getProduct, getProductImages } from '../../../services/shopify';
-import { VariantImages } from './VariantImages';
+import VariantImages from './VariantImages';
 
 export default class VariantDetail extends Component {
 	constructor(props) {
@@ -54,6 +54,7 @@ export default class VariantDetail extends Component {
 				</Dimmer>
 			);
 		}
+
 		return (
 			<div>
 				<Segment textAlign="left" basic>
@@ -70,7 +71,7 @@ export default class VariantDetail extends Component {
 					</Breadcrumb>
 				</Segment>
 				<Header>{variant.title}</Header>
-				<VariantImages images={images}></VariantImages>
+				<VariantImages images={images} variant={variant} />
 			</div>
 		);
 	}

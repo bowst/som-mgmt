@@ -16,6 +16,19 @@ export const getProductImages = async productId => {
 		const json = await response.json();
 		return json.images;
 	} catch (error) {
-		console.log('error', error);
+		throw Error(error);
+	}
+};
+
+// Metafields
+
+export const getVariantMetafields = async variantId => {
+	try {
+		const urlParams = new URLSearchParams({ variantId });
+		const response = await fetch('/api/getVariantMetafields?' + urlParams);
+		const json = await response.json();
+		return json.metafields;
+	} catch (error) {
+		throw Error(error);
 	}
 };

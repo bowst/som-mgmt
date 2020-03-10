@@ -31,6 +31,7 @@ export default class ProductDetail extends Component {
 	}
 
 	variantRow(variant) {
+		const { product } = this.state;
 		return (
 			<Table.Row key={variant.id}>
 				<Table.Cell>

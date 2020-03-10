@@ -51,3 +51,16 @@ exports.listProductImages = async productId => {
 		return error;
 	}
 };
+
+// Metafields
+
+exports.getVariantMetafields = async variantId => {
+	try {
+		const mf = await shopify.metafield.list({
+			metafield: { owner_resouce: 'product_variant', owner_id: variantId }
+		});
+		return mf;
+	} catch (error) {
+		return error;
+	}
+};
