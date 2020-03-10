@@ -8,15 +8,8 @@ import { groupBy } from 'lodash';
 const sizeOption = 'option1';
 const colorOption = 'option2';
 
-export default class VariantImages extends Component {
-	constructor(props) {
-		super(props);
-		console.log('props: ', props);
-
-		this.state = {
-			variantMetafields: null
-		};
-	}
+export const VariantImages = props => {
+	const [variantMetafields, setVariantMetafields] = userState(props.variantMetafields)
 
 	async componentDidMount() {
 		const { images, variant } = this.props;

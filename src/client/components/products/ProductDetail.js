@@ -83,8 +83,6 @@ export const ProductDetail = props => {
 				<Table.Body>
 					{variantsByColor.map((variants, i) => {
 						return colorVariantRow(variants, i);
-						// console.log('rows: ', rows);
-						// return null;
 					})}
 				</Table.Body>
 			</Table>
