@@ -8,6 +8,7 @@ const path = require('path');
 const shopify = require('./shopify');
 
 app.use(express.static('dist'));
+app.use(express.json());
 
 app.get('/api/getUsername', (req, res) => res.send({ username: os.userInfo().username }));
 
@@ -53,12 +54,11 @@ app.get('/api/getVariantMetafields', async (req, res) => {
 });
 
 app.post('/api/createVariantMetafields', async (req, res) => {
-	try {
-		const metafields = await shopify.createVariantMetafields(req.body);
-		res.send({ metafields });
-	} catch (error) {
-		throw Error(error);
-	}
+	console.log('req.body', req.body);
+	const metafields = await shopify.createVariantMetafields(req.body).catch(e => {
+		throw e;
+	});
+	res.send({ metafields });
 });
 
 const root_path = path.join(__dirname, '../../public/index.html');

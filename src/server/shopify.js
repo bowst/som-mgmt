@@ -66,20 +66,23 @@ exports.getVariantMetafields = async variantId => {
 };
 
 exports.createVariantMetafields = async ({ key, namespace, value, value_type, owner_resource, variantIds }) => {
-	try {
-		const metafields = variantIds.map(async owner_id => {
-			const mf = await shopify.metafield.create({
+	const metafields = variantIds.map(async owner_id => {
+		const mf = await shopify.metafield
+			.create({
 				key,
 				value,
 				value_type,
 				namespace,
 				owner_resource,
 				owner_id
+			})
+			.catch(e => {
+				console.log('e: ', e);
+
+				throw e;
 			});
-			return mf;
-		});
-		return metafields;
-	} catch (error) {
-		throw new Error(error);
-	}
+		console.log('mf', mf);
+		return mf;
+	});
+	return metafields;
 };

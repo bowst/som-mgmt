@@ -33,18 +33,22 @@ export const getVariantMetafields = async variantId => {
 	}
 };
 
-export const createVariantImages = async ({ variantIds, value, key }) => {
+export const createVariantImages = async ({ variantIds, value, key } = params) => {
 	try {
 		const params = {
 			variantIds,
 			value,
 			key,
 			value_type: 'json_string',
-			namespace: 'variant_images',
-			owner_resource: 'product_variant'
+			namespace: 'image_set',
+			owner_resource: 'variant'
 		};
+		console.log('params', JSON.stringify(params));
 		const response = await fetch('/api/createVariantMetafields', {
 			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
 			body: JSON.stringify(params)
 		});
 		const json = await response.json();

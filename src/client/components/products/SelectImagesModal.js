@@ -19,11 +19,14 @@ export const SelectImagesModal = props => {
 	const [images, setImages] = useState();
 	const [selectedImages, setSelected] = useState([]);
 	const options = useContext(ShopifyContext);
-	const metafieldKey = color.replace(/\s+/g, '-').toLowerCase();
+	const metafieldKey = color.replace(/\s+/g, '_').toLowerCase() + '_images';
+	const [saving, setSaving] = useState(false);
+	const [modalOpen, setModalOpen] = useState(false);
 
 	useEffect(() => {
 		const getVariantMeta = async () => {
 			const mf = await getVariantMetafields(variants[0].id);
+			console.log('mf: ', mf);
 			setVariantMeta(mf);
 		};
 		const getImages = async () => {
@@ -44,13 +47,49 @@ export const SelectImagesModal = props => {
 		setSelected(newSelected);
 	};
 
-	const handleSave = () => {
+	const handleSave = async () => {
 		console.log('variants', variants);
 		console.log('selectedImages', selectedImages);
+
+		setSaving(true);
+
+		const imagesValue = images
+			.filter(x => selectedImages.includes(x.id))
+			.map(img => {
+				return { id: img.id, url: img.src };
+			});
+
+		console.log('imagesValue: ', imagesValue);
+
+		const metaValue = {
+			images: imagesValue
+		};
+
+		const params = {
+			variantIds: variants.map(x => x.id),
+			value: metaValue,
+			key: metafieldKey
+		};
+
+		console.log('imagesValue: ', imagesValue);
+		console.log('params', params);
+
+		try {
+			const updatedMetafields = await createVariantImages(params);
+			console.log('updatedMetafields: ', updatedMetafields);
+			setModalOpen(false);
+		} catch (error) {
+			setModalOpen(false);
+			throw new Error(error);
+		}
 	};
 
 	return (
-		<Modal trigger={<Button>Select Images</Button>}>
+		<Modal
+			trigger={<Button onClick={() => setModalOpen(true)}>Select Images</Button>}
+			open={modalOpen}
+			onClose={() => setModalOpen(false)}
+		>
 			<Modal.Header>Select Images for {color}</Modal.Header>
 			<Modal.Content scrolling>
 				<Modal.Description>
