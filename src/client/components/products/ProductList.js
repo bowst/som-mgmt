@@ -1,38 +1,44 @@
 /* eslint-disable no-tabs */
-import React, { Component } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Breadcrumb, Table, Loader, Dimmer, Segment } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { sortBy, reverse } from 'lodash';
+import { Loading } from '../Loading';
 
 const moment = require('moment');
 
-export default class ProductList extends Component {
-	constructor() {
-		super();
-		this.products;
-		this.listProducts();
+export const ProductList = props => {
+	const [products, setProducts] = useState();
+	const [match, setMatch] = useState(props.match);
 
-		this.state = {
-			products: null
+	useEffect(() => {
+		const checkProps = async () => {
+			listProducts();
 		};
-	}
+		checkProps();
+	}, []);
 
-	async listProducts() {
+	const listProducts = async () => {
 		try {
 			const response = await fetch('/api/listProducts');
 			const json = await response.json();
-			const products = json.products;
-			const sortedProducts = sortBy(products, p => {
+			const sortedProducts = sortBy(json.products, p => {
 				const updatedUnix = moment(p.updated_at).unix();
 				return updatedUnix;
 			});
-			this.setState({ products: reverse(sortedProducts) });
+			console.log('sortedProducts: ', sortedProducts);
+			setProducts(reverse(sortedProducts));
 		} catch (error) {
-			throw new Error(error);
+			console.log('error: ', error);
+			// throw new Error(error);
 		}
+	};
+
+	if (!products) {
+		return <Loading />;
 	}
 
-	productRow(product) {
+	const productRow = product => {
 		const updatedDate = moment(product.updated_at).format('MMM D, YYYY hh:mm a');
 		return (
 			<Table.Row key={product.id}>
@@ -49,19 +55,9 @@ export default class ProductList extends Component {
 				<Table.Cell>{updatedDate}</Table.Cell>
 			</Table.Row>
 		);
-	}
+	};
 
-	productTable() {
-		const { products } = this.state;
-
-		if (!products) {
-			return (
-				<Dimmer active>
-					<Loader />
-				</Dimmer>
-			);
-		}
-
+	const productTable = () => {
 		return (
 			<div>
 				<Segment textAlign="left" basic>
@@ -80,15 +76,13 @@ export default class ProductList extends Component {
 
 					<Table.Body>
 						{products.map(product => {
-							return this.productRow(product);
+							return productRow(product);
 						})}
 					</Table.Body>
 				</Table>
 			</div>
 		);
-	}
+	};
 
-	render() {
-		return <div>{this.productTable()}</div>;
-	}
-}
+	return <div>{productTable()}</div>;
+};

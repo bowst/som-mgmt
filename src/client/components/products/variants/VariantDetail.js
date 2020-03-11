@@ -4,7 +4,7 @@ import { Dimmer, Loader, Header, Breadcrumb, Segment, Card } from 'semantic-ui-r
 import { Link } from 'react-router-dom';
 
 import { getProduct, getProductImages } from '../../../services/shopify';
-import VariantImages from './VariantImages';
+import VariantImages from '../SelectImagesModal';
 
 export default class VariantDetail extends Component {
 	constructor(props) {

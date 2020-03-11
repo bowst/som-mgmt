@@ -1,26 +1,26 @@
 import React, { useState, useEffect, useContext } from 'react';
 
 import { Link } from 'react-router-dom';
-import { Header, Dimmer, Loader, Segment, Breadcrumb, Table, Card } from 'semantic-ui-react';
+import { Header, Dimmer, Loader, Segment, Breadcrumb, Grid, Menu, Rail, List } from 'semantic-ui-react';
 
 import { getProduct } from '../../services/shopify';
 import ShopifyContext from '../../context/ShopifyContext';
+import { SelectImagesModal } from './SelectImagesModal';
+import { Loading } from '../Loading';
 
 import { groupBy } from 'lodash';
 
 export const ProductDetail = props => {
 	const [product, setProduct] = useState(props.product);
-	console.log('product: ', product);
+	const [tab, setTab] = useState(0);
 	const [match, setMatch] = useState(props.match);
 	const options = useContext(ShopifyContext);
-	console.log('options: ', options);
 
 	useEffect(() => {
 		const checkProps = async () => {
 			const productId = match.params.id;
 			if (!product && productId) {
 				const newProduct = await getProduct(productId);
-				console.log('newProduct: ', newProduct);
 				setProduct(newProduct);
 			}
 		};
@@ -28,36 +28,26 @@ export const ProductDetail = props => {
 	}, []);
 
 	if (!product) {
-		return (
-			<Dimmer active>
-				<Loader />
-			</Dimmer>
-		);
+		return <Loading />;
 	}
 
 	const variantsByColor = Object.entries(groupBy(product.variants, options.colorOption));
 
-	const colorVariantRow = ([color, variants], i) => {
-		console.log('color: ', color);
-		console.log('variants: ', variants);
-		const variantLength = variants.length;
-		// return <Table.Row></Table.Row>;
-		return variants.map((v, i) => {
-			if (i === 0) {
-				return (
-					<Table.Row>
-						<Table.Cell rowSpan={variantLength}>{color}</Table.Cell>
-						<Table.Cell>{v.title}</Table.Cell>
-					</Table.Row>
-				);
-			} else {
-				return (
-					<Table.Row>
-						<Table.Cell>{v.title}</Table.Cell>
-					</Table.Row>
-				);
-			}
-		});
+	const tabHeader = tabIndex => {
+		const [color, variants] = variantsByColor[tab];
+		return (
+			<Segment>
+				<Header as="h4">{color}</Header>
+				<Rail position="right">
+					<List>
+						{variants.map((v, i) => (
+							<List.Item key={i}>{v.title}</List.Item>
+						))}
+					</List>
+				</Rail>
+				<SelectImagesModal variants={variants} color={color} />
+			</Segment>
+		);
 	};
 
 	return (
@@ -72,20 +62,19 @@ export const ProductDetail = props => {
 				</Breadcrumb>
 			</Segment>
 			<Header>{product.title}</Header>
-			<Table celled striped>
-				<Table.Header>
-					<Table.Row>
-						<Table.HeaderCell>Color</Table.HeaderCell>
-						<Table.HeaderCell>Variants</Table.HeaderCell>
-					</Table.Row>
-				</Table.Header>
+			<Grid>
+				<Grid.Column width={4}>
+					<Menu fluid vertical tabular>
+						{variantsByColor.map(([color, variants], i) => {
+							return <Menu.Item key={i} name={color} active={tab == i} onClick={() => setTab(i)} />;
+						})}
+					</Menu>
+				</Grid.Column>
 
-				<Table.Body>
-					{variantsByColor.map((variants, i) => {
-						return colorVariantRow(variants, i);
-					})}
-				</Table.Body>
-			</Table>
+				<Grid.Column stretched width={12}>
+					{tabHeader(tab)}
+				</Grid.Column>
+			</Grid>
 		</div>
 	);
 };

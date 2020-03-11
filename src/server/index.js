@@ -52,6 +52,15 @@ app.get('/api/getVariantMetafields', async (req, res) => {
 	}
 });
 
+app.post('/api/createVariantMetafields', async (req, res) => {
+	try {
+		const metafields = await shopify.createVariantMetafields(req.body);
+		res.send({ metafields });
+	} catch (error) {
+		throw Error(error);
+	}
+});
+
 const root_path = path.join(__dirname, '../../public/index.html');
 // console.log('root_path', root_path);
 app.get('/*', (req, res) => res.sendFile(root_path));
