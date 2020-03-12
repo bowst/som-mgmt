@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Segment, Card, Modal, Button, Icon, Header, Image } from 'semantic-ui-react';
 import { Loading } from '../Loading';
 
-import { getVariantMetafields, getProductImages, createVariantImages } from '../../services/shopify';
+import { getProductVariantMetafields, createVariantImages } from '../../services/shopify';
 import ShopifyContext from '../../context/ShopifyContext';
 
 /**
@@ -14,27 +14,26 @@ import ShopifyContext from '../../context/ShopifyContext';
  */
 export const SelectImagesModal = props => {
 	const [variants, setVariants] = useState(props.variants);
+	const [product, setProduct] = useState(props.product);
 	const [color, setColor] = useState(props.color);
-	const [variantMeta, setVariantMeta] = useState();
-	const [images, setImages] = useState();
+	const [productMeta, setProductMeta] = useState();
+	const [images, setImages] = useState(props.images);
 	const [selectedImages, setSelected] = useState([]);
 	const options = useContext(ShopifyContext);
-	const metafieldKey = color.replace(/\s+/g, '_').toLowerCase() + '_images';
 	const [saving, setSaving] = useState(false);
 	const [modalOpen, setModalOpen] = useState(false);
 
+	// Save vars
+	const namespace = 'color_images';
+	const key = color.replace(/\s+/g, '_').toLowerCase();
+
 	useEffect(() => {
-		const getVariantMeta = async () => {
-			const mf = await getVariantMetafields(variants[0].id);
+		const getProductMeta = async () => {
+			const mf = await getProductVariantMetafields(product.id);
 			console.log('mf: ', mf);
-			setVariantMeta(mf);
+			setProductMeta(mf);
 		};
-		const getImages = async () => {
-			const imgs = await getProductImages(variants[0].product_id);
-			setImages(imgs);
-		};
-		getVariantMeta();
-		getImages();
+		getProductMeta();
 	}, []);
 
 	if (!images) {
@@ -61,14 +60,16 @@ export const SelectImagesModal = props => {
 
 		console.log('imagesValue: ', imagesValue);
 
-		const metaValue = {
-			images: imagesValue
-		};
+		// const metaValue = {
+		// 	metafield: imagesValue
+		// };
 
 		const params = {
+			owner_id: product.id,
 			variantIds: variants.map(x => x.id),
-			value: metaValue,
-			key: metafieldKey
+			value: imagesValue,
+			key,
+			namespace
 		};
 
 		console.log('imagesValue: ', imagesValue);

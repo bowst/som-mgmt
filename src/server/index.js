@@ -43,10 +43,10 @@ app.get('/api/listProductImages', async (req, res) => {
 
 // Metafields
 
-app.get('/api/getVariantMetafields', async (req, res) => {
+app.get('/api/getProductVariantMetafields', async (req, res) => {
 	try {
 		const variantId = req.query.variantId;
-		const metafields = await shopify.getVariantMetafields(variantId);
+		const metafields = await shopify.getProductVariantMetafields(variantId);
 		res.send({ metafields });
 	} catch (error) {
 		throw Error(error);
@@ -54,11 +54,26 @@ app.get('/api/getVariantMetafields', async (req, res) => {
 });
 
 app.post('/api/createVariantMetafields', async (req, res) => {
-	console.log('req.body', req.body);
-	const metafields = await shopify.createVariantMetafields(req.body).catch(e => {
+	const metafields = await shopify.createProductMetafields(req.body).catch(e => {
 		throw e;
 	});
 	res.send({ metafields });
+});
+
+app.post('/api/editMetafield', async (req, res) => {
+	const metafields = await shopify.editMetafield(req.body).catch(e => {
+		throw e;
+	});
+	res.send({ metafield });
+});
+
+app.get('/api/deleteMetafield', async (req, res) => {
+	const id = req.query.id;
+	const resp = await shopify.deleteMetafield(id).catch(e => {
+		console.log('e: ', e);
+		throw e;
+	});
+	res.send('Metafield deleted.');
 });
 
 const root_path = path.join(__dirname, '../../public/index.html');
