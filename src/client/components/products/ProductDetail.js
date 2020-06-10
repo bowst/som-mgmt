@@ -13,17 +13,19 @@ import {
 	List,
 	Table,
 	Button,
-	Icon
+	Icon,
 } from 'semantic-ui-react';
 
 import { getProduct, getProductVariantMetafields, deleteMetafield, getProductImages } from '../../services/shopify';
 import ShopifyContext from '../../context/ShopifyContext';
 import { SelectImagesModal } from './SelectImagesModal';
 import { Loading } from '../Loading';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 import { groupBy, dropWhile } from 'lodash';
 
-export const ProductDetail = props => {
+export const ProductDetail = (props) => {
 	const [product, setProduct] = useState(props.product);
 	const [productMeta, setProductMeta] = useState();
 	const [images, setImages] = useState([]);
@@ -33,12 +35,12 @@ export const ProductDetail = props => {
 	const [selectedImages, setSelected] = useState([]);
 	const options = useContext(ShopifyContext);
 
-	const getProductMeta = async productId => {
+	const getProductMeta = async (productId) => {
 		const mf = await getProductVariantMetafields(productId);
 		setProductMeta(mf);
 	};
 
-	const getImages = async productId => {
+	const getImages = async (productId) => {
 		const imgs = await getProductImages(productId);
 		setImages(imgs);
 	};
@@ -66,23 +68,23 @@ export const ProductDetail = props => {
 	const variantsByColor = Object.entries(groupBy(product.variants, options.colorOption));
 
 	const [selectedColor, _variants] = variantsByColor.filter(([color, variants], i) => tab == i)[0];
-	const colorMeta = productMeta.filter(x => x.key == selectedColor.replace(/\s+/g, '_').toLowerCase());
+	const colorMeta = productMeta.filter((x) => x.key == selectedColor.replace(/\s+/g, '_').toLowerCase());
 	console.log('colorMeta: ', colorMeta);
 	const colorImageIds = colorMeta
-		.map(x => {
+		.map((x) => {
 			const metaVals = JSON.parse(x.value);
-			return metaVals.map(m => m.id);
+			return metaVals.map((m) => m.id);
 		})
 		.flat();
 	console.log('colorImageIds', colorImageIds);
-	const colorImages = images.filter(x => colorImageIds.includes(x.id));
-	const availableImages = images.filter(img => {
+	const colorImages = images.filter((x) => colorImageIds.includes(x.id));
+	const availableImages = images.filter((img) => {
 		const taken = colorImageIds.includes(img.id);
 		console.log('available: ', !taken);
 		return !taken;
 	});
 	console.log('availableImages: ', availableImages);
-	const otherMetafields = productMeta.filter(x => x.key != selectedColor.replace(/\s+/g, '_').toLowerCase());
+	const otherMetafields = productMeta.filter((x) => x.key != selectedColor.replace(/\s+/g, '_').toLowerCase());
 	const [color, variants] = variantsByColor[tab];
 
 	const viewProductVariants = () => {
@@ -98,10 +100,10 @@ export const ProductDetail = props => {
 		);
 	};
 
-	const tabContent = tabIndex => {
-		const handleSelect = id => {
+	const tabContent = (tabIndex) => {
+		const handleSelect = (id) => {
 			const selected = selectedImages.includes(id);
-			const newSelected = selected ? selectedImages.filter(x => x !== id) : [...selectedImages, id];
+			const newSelected = selected ? selectedImages.filter((x) => x !== id) : [...selectedImages, id];
 			setSelected(newSelected);
 		};
 
@@ -143,7 +145,7 @@ export const ProductDetail = props => {
 	};
 
 	const viewOtherMeta = () => {
-		const deleteMeta = async mf => {
+		const deleteMeta = async (mf) => {
 			setPending(mf.id);
 			try {
 				await deleteMetafield(mf.id, mf.owner_id);
@@ -161,7 +163,9 @@ export const ProductDetail = props => {
 				<Table.Row key={mf.id}>
 					<Table.Cell>{mf.namespace}</Table.Cell>
 					<Table.Cell>{mf.key}</Table.Cell>
-					<Table.Cell>{mf.value}</Table.Cell>
+					<Table.Cell>
+						<ReactQuill value={mf.value} readOnly={true} theme={'bubble'} />
+					</Table.Cell>
 					<Table.Cell textAlign="right">
 						<Button onClick={() => deleteMeta(mf)} disabled={disabled}>
 							{label}

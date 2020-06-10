@@ -87,7 +87,11 @@ export const SelectImagesModal = props => {
 
 	return (
 		<Modal
-			trigger={<Button onClick={() => setModalOpen(true)}>Select Images</Button>}
+			trigger={
+				<Button style={{ marginTop: 10 }} onClick={() => setModalOpen(true)}>
+					Select Images
+				</Button>
+			}
 			open={modalOpen}
 			onClose={() => setModalOpen(false)}
 		>
